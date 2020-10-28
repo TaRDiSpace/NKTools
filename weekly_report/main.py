@@ -193,8 +193,6 @@ class WeeklyReport:
         reg = re.compile('false', re.IGNORECASE)
         if not self.is_submit or reg.match(str(self.is_submit)):
             return
-        else:
-            return
         params = {
             "staffId": self.staffId,
             "logRecordDate": self.weekdate,

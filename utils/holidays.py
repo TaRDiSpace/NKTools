@@ -3,7 +3,6 @@
 import json
 import os
 import re
-import sys
 from datetime import date, datetime, timedelta
 
 import requests
@@ -13,7 +12,7 @@ from lxml import html as HTML
 def get_holidays_from_file():
     print('load holidays from file')
     today = date.today()
-    json_file = os.path.join(sys.path[0], 'holidays.json')
+    json_file = os.path.join(os.path.dirname(__file__), 'holidays.json')
     if os.path.exists(json_file):
         holiday_json = {}
         with open(json_file, encoding='utf-8') as f:
@@ -73,7 +72,7 @@ def get_holidays_from_baidu():
                 work_list.append(d.strftime('%Y-%m-%d'))
     holiday_json = {"relax": relax_list,
                     "work": work_list, "year": today.year}
-    with open(os.path.join(sys.path[0], 'holidays.json'), 'w') as f:
+    with open(os.path.join(os.path.dirname(__file__), 'holidays.json'), 'w') as f:
         json.dump(holiday_json, f, indent=True)
     return holiday_json
 
