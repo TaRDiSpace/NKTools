@@ -8,11 +8,17 @@ from datetime import date, datetime, timedelta
 import requests
 from lxml import html as HTML
 
+IS_SCF = False
+if 'TENCENTCLOUD_RUNENV' in os.environ and os.environ['TENCENTCLOUD_RUNENV'] == 'SCF':
+    IS_SCF = True
+
 
 def get_holidays_from_file():
     print('load holidays from file')
     today = date.today()
     json_file = os.path.join(os.path.dirname(__file__), 'holidays.json')
+    if IS_SCF:
+        json_file = os.path.join('/tmp/', 'holidays.json')
     if os.path.exists(json_file):
         holiday_json = {}
         with open(json_file, encoding='utf-8') as f:
@@ -44,7 +50,7 @@ def get_holidays_from_baidu():
     if response.status_code == 200:
         html = HTML.fromstring(response.text)
         holidays = html.xpath(
-            '//div[@id="1"]/table//tr[not(@class="c-table-hihead")]')
+            '//div[@id="2"]/table//tr[not(@class="c-table-hihead")]')
         for holiday in holidays:
             name = holiday.xpath('td[1]/text()')[0]
             relax = holiday.xpath('td[2]/text()')[0]
@@ -72,7 +78,10 @@ def get_holidays_from_baidu():
                 work_list.append(d.strftime('%Y-%m-%d'))
     holiday_json = {"relax": relax_list,
                     "work": work_list, "year": today.year}
-    with open(os.path.join(os.path.dirname(__file__), 'holidays.json'), 'w') as f:
+    json_file = os.path.join(os.path.dirname(__file__), 'holidays.json')
+    if IS_SCF:
+        json_file = os.path.join('/tmp/', 'holidays.json')
+    with open(json_file, 'w') as f:
         json.dump(holiday_json, f, indent=True)
     return holiday_json
 

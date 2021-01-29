@@ -128,4 +128,19 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# SCF lib
+certifi
+certifi-2020.12.5.dist-info
+chardet
+chardet-3.0.4.dist-info
+idna
+idna-2.6.dist-info
+lxml
+lxml-4.5.0.dist-info
+requests
+requests-2.18.4.dist-info
+urllib3
+urllib3-1.22.dist-info
+
 **test*
+*.zip

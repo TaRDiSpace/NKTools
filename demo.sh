@@ -4,4 +4,4 @@ export OA_IS_SUBMIT="FALSE"
 export MAIL_PASSWORD="123456"
 export NK_DEBUG="TRUE"
 
-python3 ./weekly_report/main.py
+python3 run.py

@@ -16,7 +16,13 @@ sys.path.append(os.path.join(BASE_DIR, ".."))
 
 from utils import holidays, sendmail
 
+IS_SCF = False
+if 'TENCENTCLOUD_RUNENV' in os.environ and os.environ['TENCENTCLOUD_RUNENV'] == 'SCF':
+    IS_SCF = True
+
 LOG_FILE = os.path.join(BASE_DIR, 'weekly_report.log')
+if IS_SCF:
+    LOG_FILE = os.path.join('/tmp/', 'weekly_report.log')
 
 
 def initLog():
@@ -235,7 +241,7 @@ class WeeklyReport:
         logger.info('总耗时：%.2fs' % t)
 
 
-if __name__ == '__main__':
+def start():
     log_num = 20
     logger.info('*'*log_num + ' start ' + '*'*log_num)
     weekly_report = WeeklyReport()
@@ -245,3 +251,7 @@ if __name__ == '__main__':
     email.append_receivers(email.sender)
     with open(LOG_FILE, 'r', encoding='utf-8') as f:
         email.send('Weekly report schedule', f.read())
+
+
+if __name__ == '__main__':
+    start()
